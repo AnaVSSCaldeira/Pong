@@ -1,0 +1,72 @@
+[gd_scene load_steps=12 format=3 uid="uid://cmaj5udj0fmus"]
+
+[ext_resource type="Texture2D" uid="uid://dqf2bv15hdclw" path="res://images/Bg.png" id="1_8qm07"]
+[ext_resource type="PackedScene" uid="uid://dbhr7q4jx358h" path="res://scenes/player.tscn" id="2_2lcwv"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="2_wxedh"]
+[ext_resource type="PackedScene" uid="uid://du0gf8hu72212" path="res://scenes/cpu.tscn" id="3_ufnn4"]
+[ext_resource type="PackedScene" uid="uid://djnx6s35w3vwn" path="res://scenes/ball.tscn" id="4_7rr6p"]
+[ext_resource type="PackedScene" uid="uid://d236gowo73tbv" path="res://scenes/borders.tscn" id="5_54sa2"]
+[ext_resource type="Script" path="res://scripts/ball.gd" id="5_ainb4"]
+[ext_resource type="PackedScene" uid="uid://bsbxfegwcsq0s" path="res://scenes/score_left.tscn" id="6_uwvqv"]
+[ext_resource type="FontFile" uid="uid://8ln73ox3koy0" path="res://pixel_font.ttf" id="7_giupx"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="8_egn3u"]
+[ext_resource type="Script" path="res://scripts/cpu.gd" id="8_qdyin"]
+
+[node name="background" type="Sprite2D"]
+texture_filter = 1
+scale = Vector2(1.11111, 1.11111)
+texture = ExtResource("1_8qm07")
+centered = false
+script = ExtResource("2_wxedh")
+
+[node name="hud" type="CanvasLayer" parent="."]
+
+[node name="player_score" type="Label" parent="hud"]
+texture_filter = 1
+offset_left = 450.0
+offset_top = 10.0
+offset_right = 600.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("7_giupx")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="cpu_score" type="Label" parent="hud"]
+texture_filter = 1
+offset_left = 685.0
+offset_top = 10.0
+offset_right = 835.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("7_giupx")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ball_timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="ball" parent="." instance=ExtResource("4_7rr6p")]
+position = Vector2(570.601, 324.9)
+script = ExtResource("5_ainb4")
+
+[node name="borders" parent="." instance=ExtResource("5_54sa2")]
+
+[node name="cpu" parent="." instance=ExtResource("3_ufnn4")]
+position = Vector2(1092.6, 360)
+script = ExtResource("8_qdyin")
+
+[node name="player" parent="." instance=ExtResource("2_2lcwv")]
+script = ExtResource("8_egn3u")
+
+[node name="score_left" parent="." instance=ExtResource("6_uwvqv")]
+
+[node name="score_right" parent="." instance=ExtResource("6_uwvqv")]
+position = Vector2(-1203.3, 0)
+
+[connection signal="timeout" from="ball_timer" to="." method="_on_ball_timer_timeout"]
+[connection signal="body_entered" from="score_left" to="." method="_on_score_left_body_entered"]
+[connection signal="body_entered" from="score_right" to="." method="_on_score_right_body_entered"]
